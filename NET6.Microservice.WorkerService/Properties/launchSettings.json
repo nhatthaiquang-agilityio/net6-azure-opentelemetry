@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "NET6.Microservice.WorkerService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "environmentVariables": {}
+    }
+  }
+}
