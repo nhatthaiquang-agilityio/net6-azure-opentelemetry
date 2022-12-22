@@ -1,0 +1,62 @@
+
+version: '3.4'
+
+services:
+  sqldata:
+    container_name: sqldata
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: Your_password123
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672"
+      - "5671:5671"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_USER: admin
+
+  # OpenTelemetry Collector
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+      - ./output:/etc/output:rw # Store the logs
+    ports:
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "4317:4317"   # OTLP gRPC receiver
+
+  order.api:
+    build:
+      context: .
+      dockerfile: NET6.Microservice.Order.API/Dockerfile
+    ports:
+      - "5089:80"
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.Order.API.logs.json
+      - MassTransit:MessageBusRabbitMQ=amqp://admin:password@rabbitmq:5671/
+      - OpenTelemetry:OtelCollector=http://otel-collector:4317/
+      - OpenTelemetry:IsAzureExporter=false
+    depends_on:
+      - rabbitmq
+
+  workerservice:
+    build:
+      context: .
+      dockerfile: NET6.Microservice.WorkerService/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.WorkerService.logs.json
+      - MassTransit:MessageBusRabbitMQ=amqp://admin:password@rabbitmq:5671/
+      - OpenTelemetry:OtelCollector=http://otel-collector:4317/
+      - OpenTelemetry:IsAzureExporter=false
+    depends_on:
+      - rabbitmq
