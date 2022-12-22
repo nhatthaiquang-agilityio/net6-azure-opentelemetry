@@ -9,7 +9,7 @@ processors:
 
 exporters:
   azuremonitor:
-    instrumentation_key: "7505c993-00ab-46f7-aaff-b620f9765678"
+    instrumentation_key: ""
   logging:
     logLevel: info
 
