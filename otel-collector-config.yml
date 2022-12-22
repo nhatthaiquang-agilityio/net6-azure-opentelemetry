@@ -1,0 +1,25 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+processors:
+  batch:
+
+exporters:
+  azuremonitor:
+    instrumentation_key: "7505c993-00ab-46f7-aaff-b620f9765678"
+  logging:
+    logLevel: info
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, azuremonitor]
+    logs:
+      receivers: [otlp]
+      processors: []
+      exporters: [logging, azuremonitor]

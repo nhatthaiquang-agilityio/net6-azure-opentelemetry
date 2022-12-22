@@ -1,0 +1,14 @@
+.vs/*
+.DS_Store
+*/bin/Debug/*
+*/obj/*
+*/bin/*
+
+logs/*
+
+*/terraform/.terraform.lock.hcl
+*/terraform/.terraform.tfstate
+*/terraform/.terraform.tfstate.lock.info
+*/terraform/.terraform/*
+*/terraform/terraform.tfstate
+*/*/terraform.tfvars
