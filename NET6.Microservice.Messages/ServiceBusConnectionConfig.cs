@@ -1,4 +1,5 @@
 using MassTransit;
+using MassTransit.RabbitMqTransport;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -50,39 +51,21 @@ namespace NET6.Microservice.Messages
         }
 
         /// <summary>
-        /// Configures MassTransit.AmazonSQS with properties for successful connections
+        /// Configures Azure Service Bus with properties for successful connections
         /// </summary>
         /// <param name="configuration"></param>
-        /// <param name="configurator">configurator of AmazonSQS</param>
-        /// <param name="sectionName"></param>
+        /// <param name="configurator">configurator of Azure Service Bus</param>
+        /// <param name="connectionStringName">name of connection string</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public static void ConfigureNodes(
-            IAmazonSqsBusFactoryConfigurator configurator, string connectionString)
+        public static void ConfigureNodes(IServiceBusBusFactoryConfigurator configurator, string connectionString)
         {
-            if (string.IsNullOrEmpty(connectionString))
+            if (connectionString == null)
             {
                 throw new InvalidOperationException($"{connectionString} is not provided in the appsettings.json");
             }
 
-            var nodes = ExtractValuesFromConnectionString(connectionString);
-            var listNodes = nodes ?? nodes;
-
-            if (listNodes.Skip(1).Any())
-            {
-                return;
-            }
-
             // single nodes
-            var singleInstanceNode = listNodes.Single();
-
-            configurator.Host(singleInstanceNode.HostName, configure =>
-            {
-                configure.AccessKey(singleInstanceNode.UserName);
-                configure.SecretKey(singleInstanceNode.Password);
-
-                // scope topics as well
-                configure.EnableScopedTopics();
-            });
+            configurator.Host(connectionString);
         }
 
         /// <summary>

@@ -129,7 +129,7 @@ static ResourceBuilder GetResourceBuilder(IHostEnvironment hostEnvironment)
         .AddService(serviceName, serviceVersion: serviceVersion)
         .AddTelemetrySdk()
         .AddAttributes(attributes);
-    
+
     return resourceBuilder;
 }
 static void InitMassTransitConfig(IServiceCollection services, IConfiguration configuration)
@@ -151,25 +151,25 @@ static void InitMassTransitConfig(IServiceCollection services, IConfiguration co
             configureConsumer.UseConcurrentMessageLimit(2);
         });
 
-        if (massTransitConfiguration.IsUsingAmazonSQS)
+        if (massTransitConfiguration.IsUsingAzureServiceBus)
         {
-            configureMassTransit.UsingAmazonSqs((context, configure) =>
+            configureMassTransit.UsingAzureServiceBus((context, configure) =>
             {
-                var messageBusSQS = String.Format("{0}:{1}@{2}",
-                    massTransitConfiguration.AwsAccessKey,
-                    massTransitConfiguration.AwsSecretKey,
-                    massTransitConfiguration.AwsRegion);
-                ServiceBusConnectionConfig.ConfigureNodes(configure,  messageBusSQS);
+                ServiceBusConnectionConfig.ConfigureNodes(configure, massTransitConfiguration.AzureServiceBus);
 
-                //configure.ConfigureEndpoints(context);
-
-                configure.ReceiveEndpoint(massTransitConfiguration.OrderQueue, receive =>
+                // setup Azure queue consumer
+                configure.ReceiveEndpoint(massTransitConfiguration.OrderQueue, endpoint =>
                 {
-                    receive.ConfigureConsumer<OrderConsumer>(context);
+                    // all of these are optional!!
+                    endpoint.PrefetchCount = 4;
 
-                    receive.PrefetchCount = 4;
+                    // number of "threads" to run concurrently
+                    endpoint.MaxConcurrentCalls = 3;
+
+                    endpoint.ConfigureConsumer<OrderConsumer>(context);
                 });
             });
+
         }
         else
         {

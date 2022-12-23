@@ -43,6 +43,8 @@ services:
       - DOTNET_ENVIRONMENT=Development
       - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.Order.API.logs.json
       - MassTransit:MessageBusRabbitMQ=amqp://admin:password@rabbitmq:5671/
+      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<access-key>
+      - MassTransit:IsUsingAzureServiceBus=true
       - OpenTelemetry:OtelCollector=http://otel-collector:4317/
       - OpenTelemetry:IsAzureExporter=false
     depends_on:
@@ -56,6 +58,8 @@ services:
       - DOTNET_ENVIRONMENT=Development
       - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.WorkerService.logs.json
       - MassTransit:MessageBusRabbitMQ=amqp://admin:password@rabbitmq:5671/
+      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<access-key>
+      - MassTransit:IsUsingAzureServiceBus=true
       - OpenTelemetry:OtelCollector=http://otel-collector:4317/
       - OpenTelemetry:IsAzureExporter=false
     depends_on:

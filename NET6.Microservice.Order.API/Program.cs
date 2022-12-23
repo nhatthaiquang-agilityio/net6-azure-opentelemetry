@@ -76,14 +76,6 @@ if (isAzureExporter)
         .AddMeter("OTel.AzureMonitor.Demo")
         .AddAzureMonitorMetricExporter(o => o.ConnectionString = azureMonitorTraceExporter)
         .Build();
-
-    // LoggerFactory.Create(builder =>
-    // {
-    //     builder.AddOpenTelemetry(options =>
-    //     {
-    //         options.AddAzureMonitorLogExporter(o => o.ConnectionString = azureMonitorTraceExporter);
-    //     });
-    // });
 }
 else
 {
@@ -158,15 +150,11 @@ static void InitMassTransitConfig(IServiceCollection services, IConfiguration co
     {
         configureMassTransit.SetKebabCaseEndpointNameFormatter();
 
-        if(massTransitConfiguration.IsUsingAmazonSQS)
+        if(massTransitConfiguration.IsUsingAzureServiceBus)
         {
-            configureMassTransit.UsingAmazonSqs((context, configure) =>
+            configureMassTransit.UsingAzureServiceBus((context, configure) =>
             {
-                var messageBusSQS = String.Format("{0}:{1}@{2}",
-                    massTransitConfiguration.AwsAccessKey,
-                    massTransitConfiguration.AwsSecretKey,
-                    massTransitConfiguration.AwsRegion);
-                ServiceBusConnectionConfig.ConfigureNodes(configure, messageBusSQS);
+                ServiceBusConnectionConfig.ConfigureNodes(configure, massTransitConfiguration.AzureServiceBus);
             });
         }
         else
