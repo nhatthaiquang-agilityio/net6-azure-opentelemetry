@@ -23,9 +23,9 @@
     + It sets permission
     + It sets Trust relationships(aws/load-balancer-role-trust-policy)
 
-### Result
+### Results
 + ![Overview Monitor](./images/overview-monitor.png)
-
++ ![Application Map](./images/application-map.png)
 + ![Logs](./images/monitor-logs.png)
 
 ### References

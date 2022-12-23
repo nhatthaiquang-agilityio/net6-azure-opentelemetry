@@ -61,6 +61,7 @@ namespace NET6.Microservice.Order.API.Controllers
                     //set properties for Propagator
                     var props = new Dictionary<string, object>();
                     props["traceparent"] = activity?.Id;
+                    props["operation_parentId"] = activity?.Id;
 
                     if (Propagator == null)
                     {

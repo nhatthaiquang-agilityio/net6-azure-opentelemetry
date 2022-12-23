@@ -29,6 +29,9 @@ namespace NET6.Microservice.WorkerService.Consumers
             // set property for extracting Propagation context
             var pros = new Dictionary<string, object>();
             pros["traceparent"] = correlationId;
+            // map in Azure Monitor
+            pros["Diagnostic-Id"] = correlationId;
+            pros["operation_parentId"] = correlationId;
 
             // Extract the PropagationContext of order message
             var parentContext = Propagator.Extract(default, pros, OpenTelemetryActivity.ExtractTraceContextFromProperties);
