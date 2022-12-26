@@ -7,21 +7,13 @@
 + Azure Monitor
 
 
-### Usage
-
-
-
-### Apply Terraform
-+ Init Infrastructure
+### Usage docker-compose.yml file
++ Using otel collector for collection and sending logging
++ Add instrumentation_key into otel-collector-config.yml
++ Run on local
     ```
-    terraform init
-    terraform apply
+    docker-compose up
     ```
-
-+ Terraform will create a role name with aws-load-balancer-controller name
-    + It creates a service account(aws-load-balancer-controller)
-    + It sets permission
-    + It sets Trust relationships(aws/load-balancer-role-trust-policy)
 
 ### Results
 + ![Overview Monitor](./images/overview-monitor.png)
@@ -31,3 +23,4 @@
 ### References
 ---------------
 + [OpenTelemetry Collector and Azure Monitor](https://purple.telstra.com/blog/dotnet--opentelemetry-collector--and-azure-monitor)
++ [Open Telemetry and Azure Monitor Trace Explorer](https://tech.playgokids.com/open-telemetry-azure-monitor-trace-exporter/)
