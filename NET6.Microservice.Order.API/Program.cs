@@ -69,11 +69,14 @@ if (isAzureExporter)
         .AddSource(sources)
         .SetSampler(new ApplicationInsightsSampler(0.1F))
         .SetResourceBuilder(resourceBuilder)
+        .AddConsoleExporter()
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
         .AddAzureMonitorTraceExporter(o => o.ConnectionString = azureMonitorTraceExporter)
         .Build();
 
     Sdk.CreateMeterProviderBuilder()
-        .AddMeter("OTel.AzureMonitor.Demo")
+        .AddMeter("OrderAPI")
         .AddAzureMonitorMetricExporter(o => o.ConnectionString = azureMonitorTraceExporter)
         .Build();
 }

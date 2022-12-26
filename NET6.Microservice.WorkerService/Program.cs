@@ -79,11 +79,14 @@ IHost host = Host.CreateDefaultBuilder(args)
                 .AddSource(sources)
                 .SetSampler(new ApplicationInsightsSampler(0.1F))
                 .SetResourceBuilder(resourceBuilder)
+                .AddConsoleExporter()
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
                 .AddAzureMonitorTraceExporter(o => o.ConnectionString = azureMonitorTraceExporter)
                 .Build();
 
             Sdk.CreateMeterProviderBuilder()
-                .AddMeter("OTel.AzureMonitor.Demo")
+                .AddMeter("WorkerService")
                 .AddAzureMonitorMetricExporter(o => o.ConnectionString = azureMonitorTraceExporter)
                 .Build();
 
@@ -93,7 +96,6 @@ IHost host = Host.CreateDefaultBuilder(args)
                 {
                     options.AddAzureMonitorLogExporter(o => o.ConnectionString = azureMonitorTraceExporter);
                 });
-
             });
         }
         else

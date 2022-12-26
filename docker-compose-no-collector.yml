@@ -1,0 +1,39 @@
+
+version: '3.4'
+
+services:
+  sqldata:
+    container_name: sqldata
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: Your_password123
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+
+  order.api:
+    build:
+      context: .
+      dockerfile: NET6.Microservice.Order.API/Dockerfile
+    ports:
+      - "5089:80"
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.Order.API.logs.json
+      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<Access-Key>
+      - MassTransit:IsUsingAzureServiceBus=true
+      - MassTransit:IsUsingAzureServiceBus=true
+      - OpenTelemetry:IsAzureExporter=true
+      - OpenTelemetry:AzureMonitorTraceExporter=InstrumentationKey=<InstrumentationKey>
+
+  workerservice:
+    build:
+      context: .
+      dockerfile: NET6.Microservice.WorkerService/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.WorkerService.logs.json
+      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<Access-Key>
+      - MassTransit:IsUsingAzureServiceBus=true
+      - OpenTelemetry:IsAzureExporter=true
+      - OpenTelemetry:AzureMonitorTraceExporter=InstrumentationKey=<InstrumentationKey>
