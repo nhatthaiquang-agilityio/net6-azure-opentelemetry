@@ -1,0 +1,76 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: worker-service
+  labels:
+    app: workerservice
+spec:
+  selector:
+    app: workerservice
+  ports:
+  - protocol: TCP
+    port: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-service
+  labels:
+    app: workerservice
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: workerservice
+  template:
+    metadata:
+      labels:
+        app: workerservice
+    spec:
+      containers:
+      - name: workerservice
+        image: nhatthai/azure-opentelemetry-worker-service:latest
+        imagePullPolicy: Always
+        env:
+        - name: DOTNET_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: microservice-configmap
+              key: DOTNET_ENVIRONMENT
+
+        - name: DOTNET_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: microservice-configmap
+              key: DOTNET_ENVIRONMENT
+
+        - name: ASPNETCORE_URLS
+          valueFrom:
+            configMapKeyRef:
+              name: microservice-configmap
+              key: ASPNETCORE_URLS
+
+        - name: MassTransit__AzureServiceBus
+          value: "Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<Access-Key>"
+        - name: MassTransit__IsUsingAzureServiceBus
+          value: "true"
+
+        - name: Serilog__WriteTo__0__Args__path
+          value: "./logs/Azure.OpenTelemetry.WorkerService.logs.json"
+
+        - name: OpenTelemetry__IsAzureExporter
+          value: "true"
+        - name: OpenTelemetry__AzureMonitorTraceExporter
+          value: "InstrumentationKey=<Instrument-Key>"
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
