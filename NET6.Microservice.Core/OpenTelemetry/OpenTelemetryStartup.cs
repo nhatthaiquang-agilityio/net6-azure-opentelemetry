@@ -4,8 +4,6 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System.Diagnostics;
-using Azure.Monitor.OpenTelemetry.Exporter;
-using OpenTelemetry.Extensions.AzureMonitor;
 
 namespace NET6.Microservice.Core.OpenTelemetry
 {
@@ -74,14 +72,14 @@ namespace NET6.Microservice.Core.OpenTelemetry
             });
         }
 
-        public static void AddOpenTelemetryAzureLogging(WebApplicationBuilder builder, string azureMonitorTraceExporter)
-        {
-            // Configure logging
-            builder.Logging.AddOpenTelemetry(options =>
-            {
-                options.AddAzureMonitorLogExporter(o => o.ConnectionString = azureMonitorTraceExporter);
-            });
-        }
+        //public static void AddOpenTelemetryAzureLogging(WebApplicationBuilder builder, string azureMonitorTraceExporter)
+        //{
+        //    // Configure logging
+        //    builder.Logging.AddOpenTelemetry(options =>
+        //    {
+        //        options.AddAzureMonitorLogExporter(o => o.ConnectionString = azureMonitorTraceExporter);
+        //    });
+        //}
 
         public static void AddOpenTelemetryLogging(WebApplicationBuilder builder, string otlpExporterUri)
         {

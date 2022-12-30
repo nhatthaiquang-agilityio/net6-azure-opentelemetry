@@ -76,6 +76,8 @@ if (isAzureExporter)
         .Build();
 
     Sdk.CreateMeterProviderBuilder()
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
         .AddMeter("OrderAPI")
         .AddAzureMonitorMetricExporter(o => o.ConnectionString = azureMonitorTraceExporter)
         .Build();
@@ -87,7 +89,12 @@ else
 
 if (isAzureExporter)
 {
-    OpenTelemetryStartup.AddOpenTelemetryAzureLogging(builder, azureMonitorTraceExporter);
+    //OpenTelemetryStartup.AddOpenTelemetryAzureLogging(builder, azureMonitorTraceExporter);
+    // Configure logging
+    builder.Logging.AddOpenTelemetry(options =>
+    {
+        options.AddAzureMonitorLogExporter(o => o.ConnectionString = azureMonitorTraceExporter);
+    });
 }
 else
 {
