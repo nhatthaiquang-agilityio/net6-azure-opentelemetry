@@ -20,11 +20,10 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=Development
       - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.Order.API.logs.json
-      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<Access-Key>
-      - MassTransit:IsUsingAzureServiceBus=true
-      - MassTransit:IsUsingAzureServiceBus=true
-      - OpenTelemetry:IsAzureExporter=true
-      - OpenTelemetry:AzureMonitorTraceExporter=InstrumentationKey=<InstrumentationKey>
+      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=VBpxiFXMetnQgYLu+HP29eKCdLwpZFRHJdfKJ9x//gE=
+      - MassTransit__IsUsingAzureServiceBus=true
+      - OpenTelemetry__IsAzureExporter=true
+      - OpenTelemetry__AzureMonitorTraceExporter=InstrumentationKey=7505c993-00ab-46f7-aaff-b620f9765678
 
   workerservice:
     build:
@@ -33,7 +32,7 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=Development
       - Serilog:WriteTo:0:Args:path=/app/logs/NET6.Microservice.WorkerService.logs.json
-      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<Access-Key>
-      - MassTransit:IsUsingAzureServiceBus=true
-      - OpenTelemetry:IsAzureExporter=true
-      - OpenTelemetry:AzureMonitorTraceExporter=InstrumentationKey=<InstrumentationKey>
+      - MassTransit:AzureServiceBus=Endpoint=sb://auzreopentelemetry.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=VBpxiFXMetnQgYLu+HP29eKCdLwpZFRHJdfKJ9x//gE=
+      - MassTransit__IsUsingAzureServiceBus=true
+      - OpenTelemetry__IsAzureExporter=true
+      - OpenTelemetry__AzureMonitorTraceExporter=InstrumentationKey=7505c993-00ab-46f7-aaff-b620f9765678

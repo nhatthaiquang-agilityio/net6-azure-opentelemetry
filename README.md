@@ -15,6 +15,13 @@
     docker-compose up
     ```
 
+### Minikube: send directly log to the Azure Monitor
++ Replace AzureServiceBus and IntrumentionKey in devops/k8s/*.yml file
++ Expose Order API
+```
+minikube service --url order-api
+```
+
 ### Results
 + ![Overview Monitor](./images/overview-monitor.png)
 + ![Application Map](./images/application-map.png)
