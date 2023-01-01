@@ -3,12 +3,11 @@
 
 ## Goals
 + Integrate OpenTelemetry for tracing and metrics between services
-    - Using TraceContextPropagator
 + Azure Monitor
 
 
 ### Usage docker-compose.yml file
-+ Using otel collector for collection and sending logging
++ Using otel collector for collection and sending logging. Otel Collector will be sent the logging to the Azure Monitor.
 + Add instrumentation_key into otel-collector-config.yml
 + Run on local
     ```
@@ -17,7 +16,15 @@
 
 ### Minikube: send directly log to the Azure Monitor
 + Replace AzureServiceBus and IntrumentionKey in devops/k8s/*.yml file
++ Run services on Minikube
+```
+kubectl apply -f order-api.yml
+kubectl apply -f worker-service.yml
+kubectl apply -f ingress-minikube.yml
+```
+
 + Expose Order API
+
 ```
 minikube service --url order-api
 ```
