@@ -13,7 +13,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /order-api
+      - path: /order-api(/|$)(.*)
         pathType: Prefix
         backend:
           service:
