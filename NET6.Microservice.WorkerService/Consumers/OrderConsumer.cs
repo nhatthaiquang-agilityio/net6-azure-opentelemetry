@@ -32,6 +32,7 @@ namespace NET6.Microservice.WorkerService.Consumers
             // map in Azure Monitor
             pros["Diagnostic-Id"] = correlationId;
             pros["operation_parentId"] = correlationId;
+            pros["parentId"] = correlationId;
 
             // Extract the PropagationContext of order message
             var parentContext = Propagator.Extract(default, pros, OpenTelemetryActivity.ExtractTraceContextFromProperties);
@@ -40,6 +41,7 @@ namespace NET6.Microservice.WorkerService.Consumers
                 "Order.Product Consumer", ActivityKind.Consumer, parentContext.ActivityContext);
 
             OpenTelemetryActivity.AddActivityTagsMessage(activity);
+            //activity.TraceStateString = correlationId;
 
             try
             {

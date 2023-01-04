@@ -43,12 +43,6 @@ spec:
               name: microservice-configmap
               key: DOTNET_ENVIRONMENT
 
-        - name: DOTNET_ENVIRONMENT
-          valueFrom:
-            configMapKeyRef:
-              name: microservice-configmap
-              key: DOTNET_ENVIRONMENT
-
         - name: ASPNETCORE_URLS
           valueFrom:
             configMapKeyRef:
